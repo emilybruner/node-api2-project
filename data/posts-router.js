@@ -51,6 +51,8 @@ router.get('/:id/comments', (req, res) => {
 
 // POST requests
 
+//create a new post using the information sent inside the request body
+
 router.post('/', (req, res) => {
     const {title, contents} = Posts.insert(req.body)
     .then(posts => {
@@ -60,4 +62,27 @@ router.post('/', (req, res) => {
         res.status(500).json({error: "There was an error while saving the post to the database"})
     })
 })
+
+// creates a comment for the post with the specified id using information sent inside of the request body
+
+// router.post('/:id/comments', (req, res) => {
+//  const id = req.params.id;
+
+
+// })
+
+// DELETE request
+
+router.delete('/:id', (req, res) => {
+    Posts.remove(req.params.id)
+    .then(count => {
+        count > 0 ? res.status(200).json({ message: "Post successfully deleted"}) : res.status(404).json({message: "The post with the specified ID does not exist." })
+    })
+    .catch(error => {
+        res.status(500).json({error: "The post could not be removed"})
+    })
+})
+
+
+
 module.exports = router;
